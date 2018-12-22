@@ -116,11 +116,12 @@ UniValue searchrawtransactions(const UniValue& params, bool fHelp)
     
     if (!fAddrIndex)
         throw JSONRPCError(RPC_MISC_ERROR, "Address index not enabled");
-    
-    if (!IsValidDestinationString(params[0].get_str()))
+   
+    CBitcoinAddress address(params[0].get_str())
+    if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
 
-    CTxDestination dest = DecodeDestination(params[0].get_str());
+    CTxDestination dest = address.Get();
     
     std::set<CExtDiskTxPos> setpos;
     if (!FindTransactionsByDestination(dest, setpos))
@@ -154,10 +155,10 @@ UniValue searchrawtransactions(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Cannot read transaction from disk");
         if (fVerbose) {
             UniValue object(UniValue::VOBJ);
-            TxToJSON(tx, hashBlock, object, true, RPCSerializationFlags());
+            TxToJSON(tx, hashBlock, object);
             result.push_back(object);
         } else {
-            CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION | RPCSerializationFlags());
+            CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
             ssTx << tx;
             string strHex = HexStr(ssTx.begin(), ssTx.end());
             result.push_back(strHex);
