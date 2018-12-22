@@ -109,7 +109,7 @@ void TxToJSON(const CTransaction& tx, const uint256 hashBlock, UniValue& entry)
     }
 }
 
-Value searchrawtransactions(const UniValue& params, bool fHelp)
+UniValue searchrawtransactions(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 4)
         throw runtime_error("searchrawtransactions <address> [verbose=1] [skip=0] [count=100]\n");
@@ -147,7 +147,7 @@ Value searchrawtransactions(const UniValue& params, bool fHelp)
     std::set<CExtDiskTxPos>::const_iterator it = setpos.begin();
     while (it != setpos.end() && nSkip--) it++;
 
-    Array result;
+    UniValue result(UniValue::VARR);
     while (it != setpos.end() && nCount--) {
         CTransaction tx;
         uint256 hashBlock;
