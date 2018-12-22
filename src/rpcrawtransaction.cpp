@@ -117,7 +117,7 @@ UniValue searchrawtransactions(const UniValue& params, bool fHelp)
     if (!fAddrIndex)
         throw JSONRPCError(RPC_MISC_ERROR, "Address index not enabled");
    
-    CBitcoinAddress address(params[0].get_str())
+    CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
 
