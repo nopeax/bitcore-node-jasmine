@@ -2120,15 +2120,20 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
     int64_t ret = 0;
 
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 100)
-            ret =  blockValue / 4 * 3;
-        
+        if (nHeight < 100){
+            ret =  0;
+        } else { 
+            ret = blockValue / 4 * 3;
+        }
     }
 
-    
-    //When zPIV is staked, masternode only gets 2 PIV
-    ret = blockValue / 4 * 3;
-
+    if (nHeight < 100){
+        ret =  0;
+    } else {
+      ret = blockValue / 4 * 3;
+    }
+          
+   
     return ret;
 }
 
