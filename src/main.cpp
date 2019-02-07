@@ -1846,59 +1846,39 @@ double ConvertBitsToDouble(unsigned int nBits)
 int64_t GetBlockValue(int nHeight)
 {
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 200 && nHeight > 0)
-            return 250000 * COIN;
+
+        int64_t nSubsidy = 0;
+        if (nHeight < 100 && nHeight > 0) {
+            nSubsidy = 200 * COIN;
+        } else if (nHeight < 525700 && nHeight >= 100) {
+            nSubsidy = 10 * COIN; 
+        } else if (nHeight < 1576900 && nHeight >= 525700 ) {
+            nSubsidy = 6 * COIN;
+        } else if (nHeight < 2628100 && nHeight >= 1576900) {
+            nSubsidy = 4 * COIN;
+        } else {
+            nSubsidy = 3 * COIN;
+        }
+
+        return nSubsidy;
     }
 
     int64_t nSubsidy = 0;
-    if (nHeight == 0) {
-        nSubsidy = 20000 * COIN;
-    } else if (nHeight < 100 && nHeight > 0) {
-        nSubsidy = 2000 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 525700 : 525700) && nHeight >= 100) {
-        nSubsidy = 10 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 525700) {
-        nSubsidy = 8 * COIN;
-    } else if (nHeight <= 1576899 && nHeight > Params().LAST_POW_BLOCK()) {
-        nSubsidy = 6.4 * COIN;
-    } else if (nHeight <= 2102499 && nHeight >= 1576900) {
-        nSubsidy = 5.12 * COIN;
-    } else if (nHeight <= 2628099 && nHeight >= 2102500) {
-        nSubsidy = 4.10 * COIN;
-    } else if (nHeight <= 3153699 && nHeight >= 2628100) {
-        nSubsidy = 3.89 * COIN;
-    } else if (nHeight <= 3679299 && nHeight >= 3153700) {
-        nSubsidy = 3.70 * COIN;
-    } else if (nHeight <= 4204899 && nHeight >= 3679300) {
-        nSubsidy = 3.51 * COIN;
-    } else if (nHeight <= 4730499 && nHeight >= 4204900) {
-        nSubsidy = 3.34 * COIN;
-    } else if (nHeight <= 5256099 && nHeight >= 4730500) {
-        nSubsidy = 3.17 * COIN;
-    } else if (nHeight <= 5781699 && nHeight >= 5256100) {
-        nSubsidy = 3.01 * COIN;
-    } else if (nHeight <= 6307299 && nHeight >= 5781700) {
-        nSubsidy = 2.86 * COIN;
-    } else if (nHeight <= 6832899 && nHeight >= 6307300) {
-        nSubsidy = 2.72 * COIN;
-    } else if (nHeight <= 7358499 && nHeight >= 6832900) {
-        nSubsidy = 2.58 * COIN; 
-    } else if (nHeight <= 7884099 && nHeight >= 7358500) {
-        nSubsidy = 2.45 * COIN;
-    } else if (nHeight <= 8409699 && nHeight >= 7884100) {
-        nSubsidy = 2.33 * COIN;
-    } else if (nHeight <= 8935299 && nHeight >= 8409700) {
-        nSubsidy = 2.21 * COIN;
-    } else if (nHeight <= 9460899 && nHeight >= 8935300) {
-        nSubsidy = 2.10 * COIN;
-    } else if (nHeight <= 9986499 && nHeight >= 9460900) {
-        nSubsidy = 2 * COIN;
+    if (nHeight < 100 && nHeight > 0) {
+        nSubsidy = 200 * COIN;
+    } else if (nHeight < 525700 && nHeight >= 100) {
+        nSubsidy = 10 * COIN; 
+    } else if (nHeight < 1576900 && nHeight >= 525700 ) {
+        nSubsidy = 6 * COIN;
+    } else if (nHeight < 2628100 && nHeight >= 1576900) {
+        nSubsidy = 4 * COIN;
     } else {
-        nSubsidy = 1.90 * COIN;
+        nSubsidy = 3 * COIN;
     }
     return nSubsidy;
 }
-
+// Disabling SeeSaw
+/*
 CAmount GetSeeSaw(const CAmount& blockValue, int nMasternodeCount, int nHeight)
 {
     //if a mn count is inserted into the function we are looking for a specific result for a masternode count
@@ -2133,32 +2113,21 @@ CAmount GetSeeSaw(const CAmount& blockValue, int nMasternodeCount, int nHeight)
     }
     return ret;
 }
+*/
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, bool isZPIVStake)
 {
     int64_t ret = 0;
 
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 200)
-            return 0;
+        if (nHeight < 100)
+            ret =  blockValue / 4 * 3;
+        
     }
 
-    if (nHeight <= 43200) {
-        ret = blockValue / 5;
-    } else if (nHeight < 86400 && nHeight > 43200) {
-        ret = blockValue / (100 / 30);
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
-        ret = 50 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
-        ret = blockValue / 2;
-    } else if (nHeight < Params().Zerocoin_Block_V2_Start()) {
-        return GetSeeSaw(blockValue, nMasternodeCount, nHeight);
-    } else {
-        //When zPIV is staked, masternode only gets 2 PIV
-        ret = 3 * COIN;
-        if (isZPIVStake)
-            ret = 2 * COIN;
-    }
+    
+    //When zPIV is staked, masternode only gets 2 PIV
+    ret = blockValue / 4 * 3;
 
     return ret;
 }
