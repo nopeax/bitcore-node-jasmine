@@ -129,9 +129,9 @@ public:
         
         /** Height or Time Based Activations **/
         
-        nLastPOWBlock = 1001;
+        nLastPOWBlock = 200;
         nModifierUpdateBlock = 0;
-        nZerocoinStartHeight = 1002;
+        nZerocoinStartHeight = 210;
         nZerocoinStartTime = 1544568441; // October 17, 2017 4:30:00 AM
         nBlockEnforceSerialRange = 1004; //Enforce serial range starting this block
         nBlockRecalculateAccumulators = 1005; //Trigger a recalculation of accumulators
@@ -246,12 +246,12 @@ public:
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60; // Jasmine: 1 day
         nTargetSpacing = 1 * 60;  // Jasmine: 1 minute
-        nLastPOWBlock = 2400;
+        nLastPOWBlock = 200;
         nMaturity = 15;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
-        nZerocoinStartHeight = 500;
+        nZerocoinStartHeight = 210;
         nZerocoinStartTime = 1544914800; // fucken monday 16 dec 2018 0:00:00 UTC+1
         nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
         nBlockRecalculateAccumulators = 9908000; //Trigger a recalculation of accumulators
